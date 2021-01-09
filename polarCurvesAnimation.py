@@ -14,7 +14,6 @@ def polarPlane():
 
     return grid
 
-
 class PolarCurve(ParametricFunction):
     CONFIG = {
         "theta_min": 0,
@@ -40,7 +39,6 @@ class PolarCurve(ParametricFunction):
 
     def get_point_from_function(self, x):
         return self.polar_function(x)
-
 
 class Introduction(Scene):
     def construct(self):
@@ -141,7 +139,6 @@ class Introduction(Scene):
             0
         ])
 
-
 class Question1(GraphScene):
     def construct(self):
         grid = NumberPlane(x_line_frequency=PI/4, y_line_frequency=PI/4,)
@@ -232,10 +229,19 @@ class Question1(GraphScene):
         right_sin_odd_polar.generate_target()
         right_sin_odd_polar.target.move_to(ORIGIN)
 
+        explanation5_footnote = TextMobject("""
+            The mathematical reason for why the number of loops is $2n$\n
+            when $n$ is even and $n$ when $n$ is odd is:\n
+            $r(\\theta + \\pi) = \\sin{[n(\\theta + \\pi)]}$\n 
+            $= \\sin{n\\theta}\\cos{n\\pi} + \\cos{n\\theta}\\sin{n\\pi}$\n
+            $= \\begin{cases}\\sin{(n\\theta)}\\\\ -\\sin{(n\\theta)} \\end{cases}$
+        """)
+
         explanation6 = TextMobject("""
             However, the graph for $r = \\abs{\\sin{n\\theta}}$\n
             has $2n$ loops for all values of $n$ as every point on\n
-            the graph is traversed just once.
+            the graph is traversed just once since\n
+            $r(\\theta + \\pi) = r(\\theta)$.
         """)
 
         odd_mod_polar, even_mod_polar = self.get_mod_polar_sin_curves([3, 4])
@@ -247,6 +253,7 @@ class Question1(GraphScene):
         even_mod_group.arrange(DOWN)
         mod_group = VGroup(odd_mod_group, even_mod_group)
         mod_group.arrange(RIGHT, buff=2)
+        mod_group.shift(DOWN)
 
         self.play(Write(question))
         self.wait()
@@ -330,11 +337,13 @@ class Question1(GraphScene):
         self.wait()
         self.play(FadeOut(VGroup(left_sin_odd_polar,
                                  right_sin_odd_polar, sin_odd_label, explanation5)))
-        self.play(Write(explanation6))
-        self.wait()
-        self.play(explanation6.to_edge, UP,
-                  ShowCreation(mod_group, run_time=4))
-        self.wait()
+        self.play(Write(explanation5_footnote))
+        # self.wait()
+        # self.play(ReplacementTransform(explanation5_footnote, explanation6))
+        # self.wait()
+        # self.play(explanation6.to_edge, UP,
+        #           ShowCreation(mod_group, run_time=4))
+        # self.wait()
 
     def get_mod_polar_sin_curves(self, n, x_min=-PI, x_max=PI):
         result = []
@@ -564,7 +573,6 @@ class Question2(GraphScene):
         text.to_corner(UL)
         return text
 
-
 class Question3(GraphScene):
     def construct(self):
         question = TextMobject("""
@@ -756,7 +764,6 @@ class Question3(GraphScene):
         text.to_corner(UL)
         return text
 
-
 class Question4(GraphScene):
     def construct(self):
         question = TextMobject("""
@@ -937,6 +944,36 @@ class Question4(GraphScene):
         graph1.move_to(ORIGIN)
         group = VGroup(graph1)
         return group
+
+class Conclusion(Scene):
+    def construct(self):
+        writeup1 = TextMobject("""
+            In this project, we have explored the beautiful shapes\n
+            undertaken by Polar Curves along with the properties\n
+            of the said graphs.
+        """)
+        writeup1.set_color_by_gradient(BLUE, PURPLE)
+
+        writeup2 = TextMobject("""This project has been done by:\n
+            - Pradeep Sandilya.\n
+            - Tushar Sonthalia.\n
+            - Vedant Kabra.
+        """) 
+
+        writeup3 = TextMobject("""
+            All the animations used in this presentation has been generated\n
+            with python. The code for this project is available at:\n
+        """)
+        url = TextMobject('https://github.com/tusharsonthalia/Calculus-Project')
+        url.next_to(writeup3, DOWN)
+        url.set_color(BLUE)
+
+        self.play(Write(writeup1))
+        self.wait()
+        self.play(ReplacementTransform(writeup1, writeup2))
+        self.wait()
+        self.play(LaggedStart(*[ReplacementTransform(writeup2, writeup3), Write(url, run_time=2.5)]))
+        self.wait()
 
 class ExampleScene(Scene):
     def construct(self):
