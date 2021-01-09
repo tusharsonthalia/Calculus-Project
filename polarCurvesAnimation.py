@@ -2,21 +2,14 @@ from manimlib.imports import *
 
 
 def polarPlane():
-    grid = NumberPlane()
-#     grid.prepare_for_nonlinear_transform()
-#     grid.background_lines[1:4].fade(1)
-#     grid.background_lines[5:8].fade(1)
-#     grid.faded_lines[1:4].fade(1)
-#     grid.faded_lines[5:10].fade(1)
-#
-#     grid.apply_function(lambda p: np.array(
-#         [p[0]*np.cos(p[1]), p[0]*np.sin(p[1]), 0]))
-    grid.faded_lines[4:9].fade(1)
-    grid.faded_lines[12:].fade(1)
-    grid.background_lines[4:9].fade(1)
-    grid.background_lines[12:].fade(1)
-    grid.prepare_for_nonlinear_transform()
-    grid.apply_function(lambda p: np.array(
+    grid = NumberPlane(x_line_frequency=PI/4, y_line_frequency=PI/4,)
+    grid.generate_target()
+    grid.target.faded_lines[4:9].fade(1)
+    grid.target.faded_lines[12:].fade(1)
+    grid.target.background_lines[4:9].fade(1)
+    grid.target.background_lines[12:].fade(1)
+    grid.target.prepare_for_nonlinear_transform()
+    grid.target.apply_function(lambda p: np.array(
         [p[0]*np.cos(p[1]), p[0]*np.sin(p[1]), 0]))
 
     return grid
@@ -26,7 +19,7 @@ class PolarCurve(ParametricFunction):
     CONFIG = {
         "theta_min": 0,
         "theta_max": TAU,
-        "color": TEAL
+        "color": YELLOW
     }
 
     def __init__(self, function, **kwargs):
@@ -106,7 +99,7 @@ class Introduction(Scene):
         explanation3.to_corner(UL)
 
         grid = NumberPlane()
-        polar = polarPlane()
+        polar = polarPlane().target
 
         explanation4 = TextMobject("""
             The cartesian coordinates can be converted to polar\n
@@ -210,10 +203,10 @@ class Question1(GraphScene):
         left_sin_even = self.get_sin_curve(2, -PI, 0)
         right_sin_even = self.get_sin_curve(2, 0)
         left_sin_odd_polar, right_sin_odd_polar,\
-        left_sin_even_polar, right_sin_even_polar = self.polar_sin_curves([left_sin_odd, 
-                                                                           right_sin_odd,
-                                                                           left_sin_even,
-                                                                           right_sin_even])
+            left_sin_even_polar, right_sin_even_polar = self.polar_sin_curves([left_sin_odd,
+                                                                               right_sin_odd,
+                                                                               left_sin_even,
+                                                                               right_sin_even])
 
         sin_odd_label = TextMobject("$\\sin{(3\\theta)}$")
         sin_even_label = TextMobject("$\\sin{(2\\theta)}$")
@@ -245,7 +238,7 @@ class Question1(GraphScene):
             the graph is traversed just once.
         """)
 
-        odd_mod_polar, even_mod_polar = self.get_mod_polar_sin_curves([3,4])
+        odd_mod_polar, even_mod_polar = self.get_mod_polar_sin_curves([3, 4])
         odd_mod_polar_label = TextMobject("$r = \\abs{\\sin{3\\theta}}$")
         even_mod_polar_label = TextMobject("$r = \\abs{\\sin{4\\theta}}$")
         odd_mod_group = VGroup(odd_mod_polar, odd_mod_polar_label)
@@ -317,29 +310,37 @@ class Question1(GraphScene):
         self.wait()
         self.play(ReplacementTransform(explanation4, explanation5))
         self.wait()
-        self.play(ShowCreation(even_sin_group), Write(sin_even_label), explanation5.to_edge, UP)
+        self.play(ShowCreation(even_sin_group), Write(
+            sin_even_label), explanation5.to_edge, UP)
         self.wait()
-        self.play(ReplacementTransform(left_sin_even, left_sin_even_polar), ReplacementTransform(right_sin_even, right_sin_even_polar))
+        self.play(ReplacementTransform(left_sin_even, left_sin_even_polar),
+                  ReplacementTransform(right_sin_even, right_sin_even_polar))
         self.wait()
-        self.play(MoveToTarget(left_sin_even_polar), MoveToTarget(right_sin_even_polar))
+        self.play(MoveToTarget(left_sin_even_polar),
+                  MoveToTarget(right_sin_even_polar))
         self.wait()
-        self.play(ReplacementTransform(VGroup(left_sin_even_polar, right_sin_even_polar), odd_sin_group), ReplacementTransform(sin_even_label, sin_odd_label))
+        self.play(ReplacementTransform(VGroup(left_sin_even_polar, right_sin_even_polar),
+                                       odd_sin_group), ReplacementTransform(sin_even_label, sin_odd_label))
         self.wait()
-        self.play(ReplacementTransform(left_sin_odd, left_sin_odd_polar), ReplacementTransform(right_sin_odd, right_sin_odd_polar))
+        self.play(ReplacementTransform(left_sin_odd, left_sin_odd_polar),
+                  ReplacementTransform(right_sin_odd, right_sin_odd_polar))
         self.wait()
-        self.play(MoveToTarget(left_sin_odd_polar), MoveToTarget(right_sin_odd_polar))
+        self.play(MoveToTarget(left_sin_odd_polar),
+                  MoveToTarget(right_sin_odd_polar))
         self.wait()
-        self.remove(left_sin_odd_polar, right_sin_odd_polar)
+        self.play(FadeOut(VGroup(left_sin_odd_polar,
+                                 right_sin_odd_polar, sin_odd_label, explanation5)))
         self.play(Write(explanation6))
         self.wait()
-        self.play(explanation6.to_edge, UP, ShowCreation(mod_group, run_time=2.5))
+        self.play(explanation6.to_edge, UP,
+                  ShowCreation(mod_group, run_time=4))
         self.wait()
-
 
     def get_mod_polar_sin_curves(self, n, x_min=-PI, x_max=PI):
         result = []
         for i in n:
-            graph = FunctionGraph(lambda x: np.abs(np.sin(i * x)), x_min=x_min, x_max=x_max)
+            graph = FunctionGraph(lambda x: np.abs(
+                np.sin(i * x)), x_min=x_min, x_max=x_max)
             graph.rotate(PI, axis=UR, about_point=ORIGIN)
             graph.apply_function(lambda p: np.array(
                 [p[0] * np.cos(p[1]), p[0] * np.sin(p[1]), 0]))
@@ -361,6 +362,396 @@ class Question1(GraphScene):
             sin_curve.apply_function(lambda p: np.array(
                 [p[0] * np.cos(p[1]), p[0] * np.sin(p[1]), 0]))
         return result
+
+
+class Question2(GraphScene):
+    def construct(self):
+        question = TextMobject("""
+            A family of curves is given by the equations $r=1+c\\sin{(n\\theta)}$,\n
+            where $c$ is a real number and $n$ is a positive integer. How does\n
+            the graph change as $n$ increases? How does it change as\n
+            $c$ changes? Illustrate by graphing enough members of the\n
+            family to support your conclusions.
+        """)
+        polar_plane = polarPlane().target
+
+        explanation1 = TextMobject("""
+            Let us plot some graphs to reach a conclusion.
+        """)
+        explanation2 = TextMobject("""
+            First let us keep the value of c fixed\n
+            at 3 while we vary n from 1 to 5.
+        """)
+        explanation2.to_edge(UP)
+
+        polar_curves = [self.get_graph(n, 3) for n in range(1, 6)]
+        annotations = [self.get_annotation(
+            n, 3) for n in range(1, 6)]
+
+        explanation3 = TextMobject("""
+            It is observed that as and when the value of n increases,\n
+            the number of loops of the polar curve also increases.\n
+            More importantly, when $n$ is even the smaller loops\n
+            are outside the bigger loops, while they are inside\n
+            the bigger loops when the value of $n$ is odd.
+        """)
+
+        graph_n_3, graph_n_4 = self.get_graph(
+            3, 3).scale(.3), self.get_graph(4, 3).scale(.3)
+        graph_n_3_label = TextMobject("$r = 1 + 3\\sin{(3\\theta)}$")
+        graph_n_4_label = TextMobject("$r = 1 + 3\\sin{(4\\theta)}$")
+        graph_group = VGroup(VGroup(graph_n_3, graph_n_3_label).arrange(
+            DOWN), VGroup(graph_n_4, graph_n_4_label).arrange(DOWN))
+        graph_group.arrange(RIGHT, buff=3)
+        graph_group.to_edge(DOWN)
+
+        explanation4 = TextMobject("""
+            Now let us fix the value of $n$ as 4 while the value of\n
+            $c$ varies from -10 to 10.
+        """)
+
+        list_of_c_values = [-10, -7.4, -2.1, -0.1, 1.9, 5.7, 8.9, 10]
+        annotations2 = [self.get_annotation(4, c) for c in list_of_c_values]
+        polar_curves2 = [self.get_graph(4, c) for c in list_of_c_values]
+
+        explanation5 = TextMobject("""
+            It is observed from the previous demonstration that as $c$\n
+            increased from $-10$, the curve seemed to get smaller,\n
+            and as it reached close to $0$, the inner loops completely\n
+            disappeared. Furthermore, as the value of $c$ increased to\n
+            $10$ the curve started growing and the inner loops start to\n
+            get bigger.
+        """)
+
+        explanation6 = TextMobject("""
+            It is observed from the previous demonstration that as $c$ increased from\n
+            -10, the curve seemed to get smaller, and as it reached close to 0, the\n
+            inner loops completely disappeared. Furthermore, as the value of c\n
+            increased to 10 the curve started growing and the inner loops start to\n
+            get bigger.
+        """)
+        explanation6.to_edge(UP)
+        explanation6.scale(.7)
+
+        graph_group_1 = self.get_graph(3, -10)
+        graph_group_1.scale(.15)
+        graph_group_2 = self.get_graph(3, 10)
+        graph_group_2.scale(.15)
+        graph_group_3 = self.get_graph(4, -10)
+        graph_group_3.scale(.15)
+        graph_group_4 = self.get_graph(4, 10)
+        graph_group_4.scale(.15)
+
+        graph__label_1 = TextMobject("$n = 3, c = -10$")
+        graph__label_1.scale(.6)
+        graph__label_2 = TextMobject("$n = 3, c = 10$")
+        graph__label_2.scale(.6)
+        graph__label_3 = TextMobject("$n = 4, c = -10$")
+        graph__label_3.scale(.6)
+        graph__label_4 = TextMobject("$n = 4, c = 10$")
+        graph__label_4.scale(.6)
+
+        graph_group_1 = VGroup(graph_group_1, graph__label_1)
+        graph_group_1.arrange(DOWN)
+        graph_group_2 = VGroup(graph_group_2, graph__label_2)
+        graph_group_2.arrange(DOWN)
+        graph_group_3 = VGroup(graph_group_3, graph__label_3)
+        graph_group_3.arrange(DOWN)
+        graph_group_4 = VGroup(graph_group_4, graph__label_4)
+        graph_group_4.arrange(DOWN)
+
+        c_graph_group = VGroup(graph_group_1, graph_group_2,
+                               graph_group_3, graph_group_4)
+        c_graph_group.arrange(RIGHT)
+        c_graph_group.to_edge(DOWN)
+
+        self.play(Write(question))
+        self.wait()
+        self.play(ReplacementTransform(question, explanation1))
+        self.wait()
+        self.play(ReplacementTransform(explanation1, explanation2))
+        self.wait()
+        self.play(ShowCreation(polar_plane, run_time=3))
+        self.wait()
+        self.play(ShowCreation(polar_curves[0]), ReplacementTransform(
+            explanation2, annotations[0]))
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations[0], annotations[1]),
+            ReplacementTransform(polar_curves[0], polar_curves[1])
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations[1], annotations[2]),
+            ReplacementTransform(polar_curves[1], polar_curves[2])
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations[2], annotations[3]),
+            ReplacementTransform(polar_curves[2], polar_curves[3])
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations[3], annotations[4]),
+            ReplacementTransform(polar_curves[3], polar_curves[4])
+        )
+        self.wait()
+        self.play(FadeOut(
+            VGroup(polar_curves[4], annotations[4], polar_plane)), Write(explanation3))
+        self.wait()
+        self.play(explanation3.to_edge, UP, ShowCreation(graph_group))
+        self.wait()
+        self.play(FadeOut(VGroup(explanation3, graph_group)))
+        self.wait()
+        self.play(Write(explanation4))
+        self.wait()
+        self.play(ShowCreation(polar_plane), explanation4.to_edge, UP)
+        self.wait()
+        self.play(ReplacementTransform(explanation4,
+                                       annotations2[0]), ShowCreation(polar_curves2[0]))
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations2[0], annotations2[1]),
+            ReplacementTransform(polar_curves2[0], polar_curves2[1])
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations2[1], annotations2[2]),
+            ReplacementTransform(polar_curves2[1], polar_curves2[2])
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations2[2], annotations2[3]),
+            ReplacementTransform(polar_curves2[2], polar_curves2[3])
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations2[3], annotations2[4]),
+            ReplacementTransform(polar_curves2[3], polar_curves2[4])
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations2[4], annotations2[5]),
+            ReplacementTransform(polar_curves2[4], polar_curves2[5])
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations2[5], annotations2[6]),
+            ReplacementTransform(polar_curves2[5], polar_curves2[6])
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(annotations2[6], annotations2[7]),
+            ReplacementTransform(polar_curves2[6], polar_curves2[7])
+        )
+        self.wait()
+        self.play(FadeOut(VGroup(polar_curves2[7], polar_plane)), ReplacementTransform(
+            annotations2[7], explanation5))
+        self.wait()
+        self.play(ReplacementTransform(explanation5, explanation6),
+                  ShowCreation(c_graph_group))
+        self.wait()
+        self.play(FadeOut(VGroup(explanation6, c_graph_group)))
+        self.wait()
+
+    def get_graph(self, n, c):
+        def function(theta): return 1 + c * np.sin(n * theta)
+        graph = PolarCurve(function)
+        return graph
+
+    def get_annotation(self, n, c):
+        text = TextMobject("For $n = "+str(n)+", c = "+str(c)+"$:")
+        text.to_corner(UL)
+        return text
+
+
+class Question3(GraphScene):
+    def construct(self):
+        question = TextMobject("""
+            A family of curves has polar equations\n
+            $r = \\frac{1 - a\\cos{\\theta}}{1 + a\\cos{\\theta}}$\n
+            Investigate how the graph changes as the number a changes.\n
+            In particular, you should identity the transitional values\n
+            of a for which the basic shape of the curve changes.
+        """)
+
+        explanation1 = TextMobject("""
+            Let us plot the graph for $r = \\frac{1 - a\\cos{\\theta}}{1 + a\\cos{\\theta}}$\n
+            We will explore the shapes taken by the function for various\n
+            values of a.
+        """)
+        explanation1.generate_target()
+        explanation1.target.to_edge(UP)
+
+        polar_plane = polarPlane()
+
+        a_values = [-20, -10, 4, -2.5, -1.1, -.4,
+                    0, .4, 1.6, 2.8, 4.3, 9.8, 19.5]
+
+        polar_curves = [self.get_graph(a) for a in a_values]
+        annotations = [self.get_annotation(a) for a in a_values]
+
+        explanation2 = TextMobject("""
+            With the increase in the value of $a$, the graph moves to the left\n
+            and its right side becomes flattened. As $a$ increases through\n
+            about 0.4, the right side of the graph begins to grow a dimple.\n
+        """)
+
+        e2_graph_1 = self.get_graph(0.2)
+        e2_graph_label_1 = TextMobject(
+            "$r = \\frac{1 - 0.2\\cos{\\theta}}{1 + 0.2\\cos{\\theta}}$")
+        e2_graph_group_1 = VGroup(e2_graph_1, e2_graph_label_1)
+        e2_graph_group_1.arrange(DOWN)
+        e2_graph_group_1.to_edge(DOWN)
+        e2_graph_2 = self.get_graph(0.4)
+        e2_graph_label_2 = TextMobject(
+            "$r = \\frac{1 - 0.4\\cos{\\theta}}{1 + 0.4\\cos{\\theta}}$")
+        e2_graph_group_2 = VGroup(e2_graph_2, e2_graph_label_2)
+        e2_graph_group_2.arrange(DOWN)
+        e2_graph_group_2.to_edge(DOWN)
+        e2_graph_3 = self.get_graph(0.6)
+        e2_graph_label_3 = TextMobject(
+            "$r = \\frac{1 - 0.6\\cos{\\theta}}{1 + 0.6\\cos{\\theta}}$")
+        e2_graph_group_3 = VGroup(e2_graph_3, e2_graph_label_3)
+        e2_graph_group_3.arrange(DOWN)
+        e2_graph_group_3.to_edge(DOWN)
+
+        explanation3 = TextMobject("""
+            As $a$ tends to 1, this dimple becomes more pronounced,\n
+            and the curve begins to stretch out horizontally,\n
+            until at $a = 1$ the denominator vanishes at $\\theta = \\pi$.\n
+        """)
+
+        e3_graph_1 = self.get_graph(0.8)
+        e3_graph_1.scale(.2)
+        e3_graph_label_1 = TextMobject(
+            "$r = \\frac{1 - 0.8\\cos{\\theta}}{1 + 0.8\\cos{\\theta}}$")
+        e3_graph_group_1 = VGroup(e3_graph_1, e3_graph_label_1)
+        e3_graph_group_1.arrange(DOWN)
+        e3_graph_group_1.to_edge(DOWN)
+        e3_graph_2 = self.get_graph(0.9)
+        e3_graph_2.scale(.2)
+        e3_graph_label_2 = TextMobject(
+            "$r = \\frac{1 - 0.9\\cos{\\theta}}{1 + 0.9\\cos{\\theta}}$")
+        e3_graph_group_2 = VGroup(e3_graph_2, e3_graph_label_2)
+        e3_graph_group_2.arrange(DOWN)
+        e3_graph_group_2.to_edge(DOWN)
+        e3_graph_3 = self.get_graph(1)
+        e3_graph_3.scale(.2)
+        e3_graph_label_3 = TextMobject(
+            "$r = \\frac{1 - \\cos{\\theta}}{1 + \\cos{\\theta}}$")
+        e3_graph_group_3 = VGroup(e3_graph_3, e3_graph_label_3)
+        e3_graph_group_3.arrange(DOWN)
+        e3_graph_group_3.to_edge(DOWN)
+
+        explanation4 = TextMobject("""
+            As $a$ increases from 1, the curve splits into two parts.\n
+            The left part of the loop, which grows larger as $a$ increases,\n
+            and the right part grows broader vertically.
+        """)
+
+        e4_graph_1 = self.get_graph(2)
+        e4_graph_1.scale(0.02)
+        e4_graph_label_1 = TextMobject(
+            "$r = \\frac{1 - 2\\cos{\\theta}}{1 + 2\\cos{\\theta}}$")
+        e4_graph_group_1 = VGroup(e4_graph_1, e4_graph_label_1)
+        e4_graph_group_1.arrange(DOWN)
+        e4_graph_group_1.to_edge(DOWN)
+        e4_graph_2 = self.get_graph(7)
+        e4_graph_2.scale(0.02)
+        e4_graph_label_2 = TextMobject(
+            "$r = \\frac{1 - 7\\cos{\\theta}}{1 + 7\\cos{\\theta}}$")
+        e4_graph_group_2 = VGroup(e4_graph_2, e4_graph_label_2)
+        e4_graph_group_2.arrange(DOWN)
+        e4_graph_group_2.to_edge(DOWN)
+        e4_graph_3 = self.get_graph(15)
+        e4_graph_3.scale(0.02)
+        e4_graph_label_3 = TextMobject(
+            "$r = \\frac{1 - 15\\cos{\\theta}}{1 + 15\\cos{\\theta}}$")
+        e4_graph_group_3 = VGroup(e4_graph_3, e4_graph_label_3)
+        e4_graph_group_3.arrange(DOWN)
+        e4_graph_group_3.to_edge(DOWN)
+
+        self.play(Write(question))
+        self.wait()
+        self.play(ReplacementTransform(question, explanation1))
+        self.wait()
+        self.play(MoveToTarget(explanation1),
+                  ShowCreation(polar_plane, run_time=2.5))
+        self.wait()
+        self.play(ShowCreation(polar_curves[0]), ReplacementTransform(
+            explanation1, annotations[0]))
+        self.wait()
+        self.add_and_remove_graphs(polar_curves, 0, 1, annotations, 0, 1)
+        self.add_and_remove_graphs(polar_curves, 1, 2, annotations, 1, 2)
+        self.add_and_remove_graphs(polar_curves, 2, 3, annotations, 2, 3)
+        self.add_and_remove_graphs(polar_curves, 3, 4, annotations, 3, 4)
+        self.add_and_remove_graphs(polar_curves, 4, 5, annotations, 4, 5)
+        self.add_and_remove_graphs(polar_curves, 5, 6, annotations, 5, 6)
+        self.add_and_remove_graphs(polar_curves, 6, 7, annotations, 6, 7)
+        self.add_and_remove_graphs(polar_curves, 7, 8, annotations, 7, 8)
+        self.add_and_remove_graphs(polar_curves, 8, 9, annotations, 8, 9)
+        self.add_and_remove_graphs(polar_curves, 9, 10, annotations, 9, 10)
+        self.add_and_remove_graphs(polar_curves, 10, 11, annotations, 10, 11)
+        self.add_and_remove_graphs(polar_curves, 11, 12, annotations, 11, 12)
+        self.play(FadeOut(VGroup(polar_plane, polar_curves[12], annotations[12])))
+        self.wait()
+        self.play(Write(explanation2))
+        self.wait()
+        self.play(ShowCreation(e2_graph_group_1), explanation2.to_edge, UP)
+        self.wait()
+        self.play(
+            ReplacementTransform(e2_graph_group_1, e2_graph_group_2)
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(e2_graph_group_2, e2_graph_group_3)
+        )
+        self.wait()
+        self.play(ReplacementTransform(explanation2, explanation3), FadeOut(e2_graph_group_3))
+        self.wait()
+        self.play(ShowCreation(e3_graph_group_1), explanation3.to_edge, UP)
+        self.wait()
+        self.play(
+            ReplacementTransform(e3_graph_group_1, e3_graph_group_2)
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(e3_graph_group_2, e3_graph_group_3)
+        )
+        self.wait()
+        self.play(ReplacementTransform(explanation3, explanation4), FadeOut(e3_graph_group_3))
+        self.wait()
+        self.play(ShowCreation(e4_graph_group_1), explanation4.to_edge, UP)
+        self.wait()
+        self.play(
+            ReplacementTransform(e4_graph_group_1, e4_graph_group_2)
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(e4_graph_group_2, e4_graph_group_3)
+        )
+        self.wait()
+        self.play(FadeOut(explanation4), FadeOut(e4_graph_group_3))
+        self.wait()
+
+    def add_and_remove_graphs(self, graph, ga, gb, label, la, lb):
+        self.play(
+            ReplacementTransform(graph[ga], graph[gb]),
+            ReplacementTransform(label[la], label[lb])
+        )
+        self.wait()
+
+    def get_graph(self, a):
+        def function(theta): return (
+            1 - a*np.cos(theta)) / (1 + a*np.cos(theta))
+        graph = PolarCurve(function)
+        return graph
+
+    def get_annotation(self, a):
+        text = TextMobject("For $a = "+str(a)+"$:")
+        text.to_corner(UL)
+        return text
 
 
 class ExampleScene(Scene):
