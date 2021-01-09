@@ -694,7 +694,8 @@ class Question3(GraphScene):
         self.add_and_remove_graphs(polar_curves, 9, 10, annotations, 9, 10)
         self.add_and_remove_graphs(polar_curves, 10, 11, annotations, 10, 11)
         self.add_and_remove_graphs(polar_curves, 11, 12, annotations, 11, 12)
-        self.play(FadeOut(VGroup(polar_plane, polar_curves[12], annotations[12])))
+        self.play(
+            FadeOut(VGroup(polar_plane, polar_curves[12], annotations[12])))
         self.wait()
         self.play(Write(explanation2))
         self.wait()
@@ -708,7 +709,8 @@ class Question3(GraphScene):
             ReplacementTransform(e2_graph_group_2, e2_graph_group_3)
         )
         self.wait()
-        self.play(ReplacementTransform(explanation2, explanation3), FadeOut(e2_graph_group_3))
+        self.play(ReplacementTransform(explanation2, explanation3),
+                  FadeOut(e2_graph_group_3))
         self.wait()
         self.play(ShowCreation(e3_graph_group_1), explanation3.to_edge, UP)
         self.wait()
@@ -720,7 +722,8 @@ class Question3(GraphScene):
             ReplacementTransform(e3_graph_group_2, e3_graph_group_3)
         )
         self.wait()
-        self.play(ReplacementTransform(explanation3, explanation4), FadeOut(e3_graph_group_3))
+        self.play(ReplacementTransform(explanation3, explanation4),
+                  FadeOut(e3_graph_group_3))
         self.wait()
         self.play(ShowCreation(e4_graph_group_1), explanation4.to_edge, UP)
         self.wait()
@@ -753,6 +756,187 @@ class Question3(GraphScene):
         text.to_corner(UL)
         return text
 
+
+class Question4(GraphScene):
+    def construct(self):
+        question = TextMobject("""
+            The astronomer Giovanni Cassini (1625-1712) studied\n
+            the family of curves with polar equations:\n
+            $r^{4} - 2 c^{2}r^{2}\\cos{(2\\theta)} + c^{4} - a^{4} = 0$\n
+            where $a$ and $c$ are positive real numbers. These curves\n
+            are called the ovals of Cassini even though they are oval\n
+            shaped only for certain values of $a$ and $c$. Investigate the\n
+            variety of shapes that these curves may have. In particular,\n
+            how are $a$ and $c$ related to each other when the curve\n
+            splits into parts?   
+        """)
+
+        solution1 = TextMobject(
+            """In order to plot the curve, we must solve the equation first.""")
+        solution1.set_color(BLUE)
+        solution1.generate_target()
+        # solution1.target.match_color()
+        solution1.target.to_edge(UP)
+
+        solution2 = TexMobject(
+            "r^{4} ",                           # 0
+            "-",                                # 1
+            " c^{2}r^{2}\\cos{(2\\theta)} ",    # 2
+            "+",                                # 3
+            " c^{4} ",                          # 4
+            "-",                                # 5
+            " a^{4} ",                          # 6
+            "=",                                # 7
+            '0'                                 # 8
+        )
+        solution2.next_to(solution1.target, DOWN)
+
+        solution3 = TextMobject("Using the quadratic formula, we obtain;")
+        solution3.set_color(BLUE)
+        solution3.next_to(solution2, DOWN)
+
+        solution4 = TexMobject(
+            "r^{2} = \\frac{2c^{2}\\cos{(2\\theta)} \\pm \\sqrt{4c^{4}\\cos^{2}{(2\\theta)} - 4(c^{4} - a^{4})}}{2}"
+        )
+        solution4.next_to(solution3, DOWN)
+
+        solution5 = TexMobject(
+            "r^{2} ",                           # 0
+            "=",                                # 1
+            " c^{2}\\cos{(2\\theta)} ",         # 2
+            "\pm",                              # 3
+            " \\sqrt{",                         # 4
+            "a^{4} ",                           # 5
+            "-",                                # 6
+            " c^{4}",                           # 7
+            '\\sin^{2}{(2\\theta)}'             # 8
+        )
+        solution5.next_to(solution4, DOWN)
+
+        solution6 = TextMobject(
+            "On taking the square root on both the sides we obtain;")
+        solution6.set_color(BLUE)
+        solution6.next_to(solution5, DOWN)
+
+        solution7 = TexMobject("""
+            r = \\pm\\sqrt{c^{2}\\cos{(2\\theta)} \\pm \\sqrt{a^{4} - c^{4}\\sin^{2}{(2\\theta)}}}
+        """)
+        solution7.next_to(solution6, DOWN)
+        solution7.generate_target()
+        solution7.target.to_edge(UP)
+        solution7.target.scale(1.25)
+
+        solution8 = TextMobject(
+            "Thus, 4 curves must be plotted for every graph of this equation")
+        solution8.set_color(BLUE)
+
+        explanation1 = TextMobject(
+            "Let us plot the graphs for multiple values of $a$ and $c$")
+        explanation1.generate_target()
+        explanation1.target.to_edge(UP)
+
+        polar_plane = polarPlane().target
+
+        graph_vars = [(1, 1), (.99, 1), (1.01, 1),
+                      (4.04, 4), (1.3, 1), (1.5, 1), (2, 1)]
+        annotations = [self.get_annotation(a, c, explanation1.target) for a, c in graph_vars]
+        graphs = [self.get_graph(a, c) for a, c in graph_vars]
+
+        explanation2 = TextMobject("""
+            We have observed that when $a$ and $c$ equalled 1, the shape\n
+            of the curve resembled somewhat of the infinity ($\\infty$) sign.\n
+        """)
+        explanation2.shift(UP*1.5)
+
+        explanation3 = TextMobject("""
+            As the value of $a$ went on increasing, the curve began losing\n
+            its dimples and started looking more like an oval.\n
+        """) 
+        explanation3.next_to(explanation2, DOWN)
+
+        explanation4 = TextMobject("""
+            The shape of the curve started resembling that of an oval\n
+            as $a$ reached the value of 1.5 and for all the higher values\n
+            the curve started becoming rounder and larger.
+        """) 
+        explanation4.next_to(explanation3, DOWN)
+
+        self.play(Write(question))
+        self.wait()
+        self.play(ReplacementTransform(question, solution1))
+        self.wait()
+        self.play(MoveToTarget(solution1), Write(solution2))
+        self.wait()
+        self.play(Write(solution3))
+        self.wait()
+        self.play(
+            ReplacementTransform(solution2.copy(), solution4),
+        )
+        self.wait()
+        self.play(
+            ReplacementTransform(solution4.copy(), solution5),
+        )
+        self.wait()
+        self.play(Write(solution6))
+        self.wait()
+        self.play(
+            ReplacementTransform(solution5.copy(), solution7),
+        )
+        self.wait()
+        self.play(
+            MoveToTarget(solution7),
+            FadeOut(VGroup(
+                solution1,
+                solution2,
+                solution3,
+                solution4,
+                solution5,
+                solution6
+            ))
+        )
+        self.wait()
+        self.play(Write(solution8))
+        self.wait()
+        self.play(FadeOut(solution7),
+                  ReplacementTransform(solution8, explanation1))
+        self.play(MoveToTarget(explanation1), ShowCreation(polar_plane, run_time=2.5))
+        self.wait()
+        self.play(Write(annotations[0]), ShowCreation(graphs[0]))
+        self.wait()
+        self.add_and_remove_graphs(annotations, 1, graphs, 1)
+        self.add_and_remove_graphs(annotations, 2, graphs, 2)
+        self.add_and_remove_graphs(annotations, 3, graphs, 3)
+        self.add_and_remove_graphs(annotations, 4, graphs, 4)
+        self.add_and_remove_graphs(annotations, 5, graphs, 5)
+        self.add_and_remove_graphs(annotations, 6, graphs, 6)
+        self.play(
+            FadeOut(VGroup(polar_plane, annotations[6], graphs[6], explanation1)),
+            Write(explanation2)
+        )
+        self.wait()
+        self.play(Write(explanation3))
+        self.wait()
+        self.play(Write(explanation4))
+        self.wait()
+
+    def add_and_remove_graphs(self, annotations, index, graphs, index2):
+        self.play(
+            ReplacementTransform(annotations[index - 1], annotations[index]),
+            ReplacementTransform(graphs[index2 - 1], graphs[index2])
+        )
+        self.wait()
+
+    def get_annotation(self, a, c, obj):
+        text = TextMobject(f"For $a =$ {a} and $c =$ {c}:")
+        text.next_to(obj, DOWN)
+        return text
+
+    def get_graph(self, a, c):
+        func1 = lambda theta: np.sqrt(c**2 * np.cos(2 * theta)) + np.sqrt(a**4 - c**4 * np.square(np.sin(2*theta)))
+        graph1 = PolarCurve(func1)
+        graph1.move_to(ORIGIN)
+        group = VGroup(graph1)
+        return group
 
 class ExampleScene(Scene):
     def construct(self):
