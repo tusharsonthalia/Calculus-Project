@@ -338,12 +338,12 @@ class Question1(GraphScene):
         self.play(FadeOut(VGroup(left_sin_odd_polar,
                                  right_sin_odd_polar, sin_odd_label, explanation5)))
         self.play(Write(explanation5_footnote))
-        # self.wait()
-        # self.play(ReplacementTransform(explanation5_footnote, explanation6))
-        # self.wait()
-        # self.play(explanation6.to_edge, UP,
-        #           ShowCreation(mod_group, run_time=4))
-        # self.wait()
+        self.wait()
+        self.play(ReplacementTransform(explanation5_footnote, explanation6))
+        self.wait()
+        self.play(explanation6.to_edge, UP,
+                  ShowCreation(mod_group, run_time=4))
+        self.wait()
 
     def get_mod_polar_sin_curves(self, n, x_min=-PI, x_max=PI):
         result = []
