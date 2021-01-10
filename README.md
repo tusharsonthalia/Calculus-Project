@@ -4,6 +4,6 @@
 
 #### Group Members:
 
--   Vedant Kabra (BS19BDS020).
--   Tushar Sonthalia (BS19BDS022).
--   Pradeep Sandilya (BS19BDS023).
+-   Vedant Kabra (BS19BDS020)
+-   Tushar Sonthalia (BS19BDS022)
+-   Pradeep Sandilya (BS19BDS023)
