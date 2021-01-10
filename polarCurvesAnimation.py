@@ -111,26 +111,26 @@ class Introduction(Scene):
         grid_copy = NumberPlane()
 
         self.play(Write(intro_text))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(intro_text, explanation1))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation1, explanation2),
                   ShowCreation(graph_group))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(index))
-        self.wait()
+        # self.wait()
         self.play(Write(labels))
-        self.wait()
+        # self.wait()
         self.play(FadeOut(VGroup(graph_group, index, explanation2, labels)))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(grid, run_time=3))
         self.play(Write(explanation3))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(grid, polar, run_time=3))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation3, explanation4),
                   ReplacementTransform(polar, grid_copy, run_time=3))
-        self.wait()
+        # self.wait()
 
     def polar_to_c(self, point):
         return np.array([
@@ -256,94 +256,94 @@ class Question1(GraphScene):
         mod_group.shift(DOWN)
 
         self.play(Write(question))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(question, explanation1))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(grid, run_time=2))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(sin_curves[0],
                                run_time=2), Write(annotations[0]))
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(sin_curves[0], sin_curves[1]),
             ReplacementTransform(annotations[0], annotations[1])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(sin_curves[1], sin_curves[2]),
             ReplacementTransform(annotations[1], annotations[2])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(sin_curves[2], sin_curves[3]),
             ReplacementTransform(annotations[2], annotations[3])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(sin_curves[3], sin_curves[4]),
             ReplacementTransform(annotations[3], annotations[4])
         )
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation1, explanation2))
-        self.wait()
+        # self.wait()
         self.play(MoveToTarget(grid), ReplacementTransform(
             sin_curves[4], polar_sin_curves[4]), run_time=2)
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(polar_sin_curves[4], polar_sin_curves[3]),
             ReplacementTransform(annotations[4], new_annotations[3])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(polar_sin_curves[3], polar_sin_curves[2]),
             ReplacementTransform(new_annotations[3], new_annotations[2])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(polar_sin_curves[2], polar_sin_curves[1]),
             ReplacementTransform(new_annotations[2], new_annotations[1])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(polar_sin_curves[1], polar_sin_curves[0]),
             ReplacementTransform(new_annotations[1], new_annotations[0])
         )
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation2, explanation3),
                   FadeOut(new_annotations[0]))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation3, explanation4),
                   FadeOut(VGroup(grid, polar_sin_curves[0])))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation4, explanation5))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(even_sin_group), Write(
             sin_even_label), explanation5.to_edge, UP)
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(left_sin_even, left_sin_even_polar),
                   ReplacementTransform(right_sin_even, right_sin_even_polar))
-        self.wait()
+        # self.wait()
         self.play(MoveToTarget(left_sin_even_polar),
                   MoveToTarget(right_sin_even_polar))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(VGroup(left_sin_even_polar, right_sin_even_polar),
                                        odd_sin_group), ReplacementTransform(sin_even_label, sin_odd_label))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(left_sin_odd, left_sin_odd_polar),
                   ReplacementTransform(right_sin_odd, right_sin_odd_polar))
-        self.wait()
+        # self.wait()
         self.play(MoveToTarget(left_sin_odd_polar),
                   MoveToTarget(right_sin_odd_polar))
-        self.wait()
+        # self.wait()
         self.play(FadeOut(VGroup(left_sin_odd_polar,
                                  right_sin_odd_polar, sin_odd_label, explanation5)))
         self.play(Write(explanation5_footnote))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation5_footnote, explanation6))
-        self.wait()
+        # self.wait()
         self.play(explanation6.to_edge, UP,
                   ShowCreation(mod_group, run_time=4))
-        self.wait()
+        # self.wait()
 
     def get_mod_polar_sin_curves(self, n, x_min=-PI, x_max=PI):
         result = []
@@ -475,93 +475,93 @@ class Question2(GraphScene):
         c_graph_group.to_edge(DOWN)
 
         self.play(Write(question))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(question, explanation1))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation1, explanation2))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(polar_plane, run_time=3))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(polar_curves[0]), ReplacementTransform(
             explanation2, annotations[0]))
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations[0], annotations[1]),
             ReplacementTransform(polar_curves[0], polar_curves[1])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations[1], annotations[2]),
             ReplacementTransform(polar_curves[1], polar_curves[2])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations[2], annotations[3]),
             ReplacementTransform(polar_curves[2], polar_curves[3])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations[3], annotations[4]),
             ReplacementTransform(polar_curves[3], polar_curves[4])
         )
-        self.wait()
+        # self.wait()
         self.play(FadeOut(
             VGroup(polar_curves[4], annotations[4], polar_plane)), Write(explanation3))
-        self.wait()
+        # self.wait()
         self.play(explanation3.to_edge, UP, ShowCreation(graph_group))
-        self.wait()
+        # self.wait()
         self.play(FadeOut(VGroup(explanation3, graph_group)))
-        self.wait()
+        # self.wait()
         self.play(Write(explanation4))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(polar_plane), explanation4.to_edge, UP)
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation4,
                                        annotations2[0]), ShowCreation(polar_curves2[0]))
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations2[0], annotations2[1]),
             ReplacementTransform(polar_curves2[0], polar_curves2[1])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations2[1], annotations2[2]),
             ReplacementTransform(polar_curves2[1], polar_curves2[2])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations2[2], annotations2[3]),
             ReplacementTransform(polar_curves2[2], polar_curves2[3])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations2[3], annotations2[4]),
             ReplacementTransform(polar_curves2[3], polar_curves2[4])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations2[4], annotations2[5]),
             ReplacementTransform(polar_curves2[4], polar_curves2[5])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations2[5], annotations2[6]),
             ReplacementTransform(polar_curves2[5], polar_curves2[6])
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(annotations2[6], annotations2[7]),
             ReplacementTransform(polar_curves2[6], polar_curves2[7])
         )
-        self.wait()
+        # self.wait()
         self.play(FadeOut(VGroup(polar_curves2[7], polar_plane)), ReplacementTransform(
             annotations2[7], explanation5))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation5, explanation6),
                   ShowCreation(c_graph_group))
-        self.wait()
+        # self.wait()
         self.play(FadeOut(VGroup(explanation6, c_graph_group)))
-        self.wait()
+        # self.wait()
 
     def get_graph(self, n, c):
         def function(theta): return 1 + c * np.sin(n * theta)
@@ -569,7 +569,7 @@ class Question2(GraphScene):
         return graph
 
     def get_annotation(self, n, c):
-        text = TextMobject("For $n = "+str(n)+", c = "+str(c)+"$:")
+        text = TextMobject(f"For $n$ = {n}, $c$ = {c}:")
         text.to_corner(UL)
         return text
 
@@ -681,15 +681,15 @@ class Question3(GraphScene):
         e4_graph_group_3.to_edge(DOWN)
 
         self.play(Write(question))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(question, explanation1))
-        self.wait()
+        # self.wait()
         self.play(MoveToTarget(explanation1),
                   ShowCreation(polar_plane, run_time=2.5))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(polar_curves[0]), ReplacementTransform(
             explanation1, annotations[0]))
-        self.wait()
+        # self.wait()
         self.add_and_remove_graphs(polar_curves, 0, 1, annotations, 0, 1)
         self.add_and_remove_graphs(polar_curves, 1, 2, annotations, 1, 2)
         self.add_and_remove_graphs(polar_curves, 2, 3, annotations, 2, 3)
@@ -704,54 +704,54 @@ class Question3(GraphScene):
         self.add_and_remove_graphs(polar_curves, 11, 12, annotations, 11, 12)
         self.play(
             FadeOut(VGroup(polar_plane, polar_curves[12], annotations[12])))
-        self.wait()
+        # self.wait()
         self.play(Write(explanation2))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(e2_graph_group_1), explanation2.to_edge, UP)
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(e2_graph_group_1, e2_graph_group_2)
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(e2_graph_group_2, e2_graph_group_3)
         )
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation2, explanation3),
                   FadeOut(e2_graph_group_3))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(e3_graph_group_1), explanation3.to_edge, UP)
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(e3_graph_group_1, e3_graph_group_2)
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(e3_graph_group_2, e3_graph_group_3)
         )
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(explanation3, explanation4),
                   FadeOut(e3_graph_group_3))
-        self.wait()
+        # self.wait()
         self.play(ShowCreation(e4_graph_group_1), explanation4.to_edge, UP)
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(e4_graph_group_1, e4_graph_group_2)
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(e4_graph_group_2, e4_graph_group_3)
         )
-        self.wait()
+        # self.wait()
         self.play(FadeOut(explanation4), FadeOut(e4_graph_group_3))
-        self.wait()
+        # self.wait()
 
     def add_and_remove_graphs(self, graph, ga, gb, label, la, lb):
         self.play(
             ReplacementTransform(graph[ga], graph[gb]),
             ReplacementTransform(label[la], label[lb])
         )
-        self.wait()
+        # self.wait()
 
     def get_graph(self, a):
         def function(theta): return (
@@ -869,27 +869,27 @@ class Question4(GraphScene):
         explanation4.next_to(explanation3, DOWN)
 
         self.play(Write(question))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(question, solution1))
-        self.wait()
+        # self.wait()
         self.play(MoveToTarget(solution1), Write(solution2))
-        self.wait()
+        # self.wait()
         self.play(Write(solution3))
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(solution2.copy(), solution4),
         )
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(solution4.copy(), solution5),
         )
-        self.wait()
+        # self.wait()
         self.play(Write(solution6))
-        self.wait()
+        # self.wait()
         self.play(
             ReplacementTransform(solution5.copy(), solution7),
         )
-        self.wait()
+        # self.wait()
         self.play(
             MoveToTarget(solution7),
             FadeOut(VGroup(
@@ -901,15 +901,15 @@ class Question4(GraphScene):
                 solution6
             ))
         )
-        self.wait()
+        # self.wait()
         self.play(Write(solution8))
-        self.wait()
+        # self.wait()
         self.play(FadeOut(solution7),
                   ReplacementTransform(solution8, explanation1))
         self.play(MoveToTarget(explanation1), ShowCreation(polar_plane, run_time=2.5))
-        self.wait()
+        # self.wait()
         self.play(Write(annotations[0]), ShowCreation(graphs[0]))
-        self.wait()
+        # self.wait()
         self.add_and_remove_graphs(annotations, 1, graphs, 1)
         self.add_and_remove_graphs(annotations, 2, graphs, 2)
         self.add_and_remove_graphs(annotations, 3, graphs, 3)
@@ -920,18 +920,18 @@ class Question4(GraphScene):
             FadeOut(VGroup(polar_plane, annotations[6], graphs[6], explanation1)),
             Write(explanation2)
         )
-        self.wait()
+        # self.wait()
         self.play(Write(explanation3))
-        self.wait()
+        # self.wait()
         self.play(Write(explanation4))
-        self.wait()
+        # self.wait()
 
     def add_and_remove_graphs(self, annotations, index, graphs, index2):
         self.play(
             ReplacementTransform(annotations[index - 1], annotations[index]),
             ReplacementTransform(graphs[index2 - 1], graphs[index2])
         )
-        self.wait()
+        # self.wait()
 
     def get_annotation(self, a, c, obj):
         text = TextMobject(f"For $a =$ {a} and $c =$ {c}:")
@@ -969,11 +969,11 @@ class Conclusion(Scene):
         url.set_color(BLUE)
 
         self.play(Write(writeup1))
-        self.wait()
+        # self.wait()
         self.play(ReplacementTransform(writeup1, writeup2))
-        self.wait()
+        # self.wait()
         self.play(LaggedStart(*[ReplacementTransform(writeup2, writeup3), Write(url, run_time=2.5)]))
-        self.wait()
+        # self.wait()
 
 class ExampleScene(Scene):
     def construct(self):
@@ -1010,4 +1010,4 @@ class ExampleScene(Scene):
         self.play(
             MoveToTarget(grid, run_time=4)
         )
-        self.wait(3)
+        # self.wait(3)
